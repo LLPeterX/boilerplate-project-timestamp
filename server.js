@@ -50,7 +50,7 @@ app.get("/api/timestamp/:date?", function(req, res) {
     // :date не указан - вернуть текущее время
     result = new Date();
   }
-  res.send(result ? {unix: result.getTime(), utc: result.toString().split('+')[0]} : {error : "Invalid Date"});
+  res.send(result ? {unix: result.getTime(), utc: result.toUTCString().split('+')[0]} : {error : "Invalid Date"});
 });
 
 // listen for requests :)
@@ -60,3 +60,10 @@ var listener = app.listen(process.env.PORT, function () {
 
 let dt = "Fri Dec 25 2015 03:00:00 GMT+0300 (GMT+03:00)";
 console.log(dt.split('+')[0]);
+
+
+//need: { unix: 1451001600000, utc: "Fri, 25 Dec 2015 00:00:00 GMT" }
+// got: { unix: 1451001600000, utc: "Fri Dec 25 2015 03:00:00 GMT"}
+
+let d = new Date(1451001600000);
+console.log(d.toUTCString());
