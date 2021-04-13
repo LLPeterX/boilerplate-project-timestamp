@@ -33,18 +33,8 @@ app.get("/api/timestamp/:date?", function(req, res) {
       // time in ms
       result = new Date(+reqDate);
     } else {
-      // try parse YYYY-MM-DD
-      let m = reqDate.match(/(\d{4})-(\d{2})-(\d{2})/);
-      if(!m) {
-        result = null;
-      } else {
-        let ms = Date.parse(reqDate); // in ms
-        if(ms == 'Invalid Date') {
-          result = null;
-        } else {
-          result = new Date(ms);
-        }
-      }
+      let ms = Date.parse(reqDate);
+      result = isNaN(ms) ? null : new Date(ms);
     }
   } else {
     // :date не указан - вернуть текущее время
@@ -65,5 +55,10 @@ console.log(dt.split('+')[0]);
 //need: { unix: 1451001600000, utc: "Fri, 25 Dec 2015 00:00:00 GMT" }
 // got: { unix: 1451001600000, utc: "Fri Dec 25 2015 03:00:00 GMT"}
 
-let d = new Date(1451001600000);
-console.log(d.toUTCString());
+//let d = new Date(1451001600000);
+//console.log(d.toUTCString());
+let x = '05 October 2011';
+let d = Date.parse(x);
+console.log(d);
+
+console.log(Date.parse('24-11-11'));
