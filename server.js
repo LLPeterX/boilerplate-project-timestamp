@@ -31,28 +31,26 @@ app.get("/api/timestamp/:date?", function(req, res) {
   if(reqDate) {
     if(!isNaN(+reqDate)) {
       // time in ms
-      let d = new Date(+reqDate);
-      result = {unix: d.getTime(), utc: d.toString()};
+      result = new Date(+reqDate);
     } else {
       // try parse YYYY-MM-DD
       let m = reqDate.match(/(\d{4})-(\d{2})-(\d{2})/);
       if(!m) {
-        result = {error : "Invalid Date"};
+        result = null;
       } else {
-        let d = Date.parse(reqDate); // ms
-        if(d == 'Invalid Date') {
-          result = {error : "Invalid Date"};
+        let ms = Date.parse(reqDate); // in ms
+        if(ms == 'Invalid Date') {
+          result = null;
         } else {
-          d = new Date(d);
-          result = {unix: d.getTime(), utc: d.toString()};
+          result = new Date(ms);
         }
       }
     }
   } else {
     // :date не указан - вернуть текущее время
-    result = {unix: Date.now(), utc: Date().toString()};
+    result = new Date();
   }
-  res.send(result);
+  res.send(result ? {unix: result.getTime(), utc: result.toString().split('+')[0]} : {error : "Invalid Date"});
 });
 
 // listen for requests :)
@@ -60,3 +58,5 @@ var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 
+let dt = "Fri Dec 25 2015 03:00:00 GMT+0300 (GMT+03:00)";
+console.log(dt.split('+')[0]);
