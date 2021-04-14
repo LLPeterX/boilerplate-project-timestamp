@@ -43,22 +43,22 @@ app.get("/api/timestamp/:date?", function(req, res) {
   res.send(result ? {unix: result.getTime(), utc: result.toUTCString().split('+')[0]} : {error : "Invalid Date"});
 });
 
+// for https://www.freecodecamp.org/learn/apis-and-microservices/apis-and-microservices-projects/request-header-parser-microservice
+
+app.get("/api/whoami", function(req, res) {
+  let ipaddress = req.socket.remoteAddress,
+      software = req.headers['user-agent'],
+      language = req.headers['accept-language'] || 'ru-RU';
+  if(ipaddress === "::1") {
+    ipaddress='127.0.0.1';
+  }
+  language = language.split(';')[0];  
+  res.json({ipaddress, language, software});
+});
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 
-let dt = "Fri Dec 25 2015 03:00:00 GMT+0300 (GMT+03:00)";
-console.log(dt.split('+')[0]);
-
-
-//need: { unix: 1451001600000, utc: "Fri, 25 Dec 2015 00:00:00 GMT" }
-// got: { unix: 1451001600000, utc: "Fri Dec 25 2015 03:00:00 GMT"}
-
-//let d = new Date(1451001600000);
-//console.log(d.toUTCString());
-let x = '05 October 2011';
-let d = Date.parse(x);
-console.log(d);
-
-console.log(Date.parse('24-11-11'));
+// let x = 'aaa';
+// console.log(x.split(';')[0]);
